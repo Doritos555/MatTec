@@ -143,7 +143,7 @@ def menu():
 
     st.sidebar.header("MENU")
 
-    st.image("Tajador.wepb")
+    st.image("Tajador.webp")
 
     opcao = st.sidebar.selectbox(
         "SELECIONE A FUNÇÃO:",
