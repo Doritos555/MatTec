@@ -135,16 +135,6 @@ def salvar_matriz_especifica_csv(idx):
     df = pd.DataFrame(m)
     return df.to_csv(index=False).encode('utf-8')
 
-def salvar_matriz_localmente(idx, caminho="matriz.csv"):
-    m = st.session_state.ms[idx]
-    df = pd.DataFrame(m)
-    try:
-        df.to_csv(caminho, index=False)
-        st.success(f"Matriz salva em: `{caminho}`")
-    except Exception as e:
-        st.error(f"Erro ao salvar matriz: {e}")
-
-
 def carregar_matriz_csv(arquivo):
     try:
         df = pd.read_csv(arquivo)
@@ -268,24 +258,18 @@ def menu():
     elif opcao == "salvar matrizes em CSV":
         if st.session_state.ms:
             idx = st.selectbox("Escolha a matriz para salvar:", 
-                            range(len(st.session_state.ms)), 
-                            format_func=lambda i: st.session_state.ts[i])
-
-            st.write("### Opção 1: Baixar CSV (navegador)")
+                               range(len(st.session_state.ms)), 
+                               format_func=lambda i: st.session_state.ts[i])
+            
             csv_data = salvar_matriz_especifica_csv(idx)
             nome_arquivo = f"{st.session_state.ts[idx]}.csv"
-
+    
             st.download_button(
                 label="Baixar CSV",
                 data=csv_data,
                 file_name=nome_arquivo,
                 mime='text/csv'
             )
-
-            st.write("### Opção 2: Salvar localmente no servidor")
-            caminho = st.text_input("Caminho completo para salvar", value=f"./{nome_arquivo}")
-            if st.button("Salvar localmente"):
-                salvar_matriz_localmente(idx, caminho)
         else:
             st.warning("Nenhuma matriz disponível para salvar.")
 
