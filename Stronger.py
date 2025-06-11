@@ -143,7 +143,7 @@ def menu():
 
     st.sidebar.header("MENU")
 
-    st.image("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.crunchyroll.com%2Fpt-pt%2Fnews%2Fquizzes%2F2023%2F4%2F3%2Fenquete-quais-foram-os-melhores-momentos-entre-nagatoro-e-senpai-na-2-temporada-de-dont-toy-with-me-miss-nagatoro&psig=AOvVaw35QRmVoit_nmeKwvKvT73R&ust=1749664149609000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCLi-v4O1540DFQAAAAAdAAAAABAy")
+    st.image("Tajador.wepb")
 
     opcao = st.sidebar.selectbox(
         "SELECIONE A FUNÇÃO:",
