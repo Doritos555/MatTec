@@ -68,20 +68,17 @@ def imprime_lista_matrizes(ms, ts, title = "Lista de Matrizes"):
 
     return fig
 
-def recebe_matriz_manual(n, k):
-   
-    m = []
-    linhas = range(n)
-    colunas = range(k)
-    
-    for i in linhas:
+def recebe_matriz_manual_streamlit(n, k):
+    matriz = []
+    st.write("Insira os valores da matriz:")
+    for i in range(n):
         linha = []
-        for j in colunas:
-            elemento = input(f"Elemento [{i}][{j}]: ")
-            linha.append(float(elemento)) # admite float
-        m.append(linha)
-    
-    return m
+        cols = st.columns(k)
+        for j in range(k):
+            valor = cols[j].number_input(f"[{i}][{j}]", key=f"manual_{i}_{j}")
+            linha.append(valor)
+        matriz.append(linha)
+    return matriz
 
 def recebe_matriz_aleatoria(n, k):
     m = []
@@ -182,13 +179,16 @@ def menu():
     )
 
     if opcao == "recebe matriz manual":
-        n = st.sidebar.number_input("Linhas:", min_value=1, value=2)
-        k = st.sidebar.number_input("Colunas:", min_value=1, value=2)
-        m = recebe_matriz_manual(n, k)
-        if st.button("Salvar Matriz Manual"):
-            st.session_state.ms.append(m)
-            st.session_state.r += 1
-            st.session_state.ts.append(f"m{st.session_state.r}")
+        n = st.sidebar.number_input("Número de linhas (n):", min_value=1, value=3, step=1, key="linhas_manual")
+        k = st.sidebar.number_input("Número de colunas (k):", min_value=1, value=3, step=1, key="colunas_manual")
+
+        with st.form("form_matriz_manual"):
+            matriz = recebe_matriz_manual_streamlit(n, k)
+            submitted = st.form_submit_button("Salvar matriz")
+            if submitted:
+                st.session_state.ms.append(matriz)
+                st.session_state.r += 1
+                st.session_state.ts.append(f"m{st.session_state.r}")
 
     elif opcao == "recebe matriz aleatória":
         n = st.sidebar.number_input("Número de linhas (n):", min_value=1, value=3, step=1)
