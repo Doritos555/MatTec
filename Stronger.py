@@ -129,11 +129,11 @@ def determinante_matriz_np(m):
     except:
         st.error("Erro ao calcular determinante.")
         return None
-
-def salvar_matrizes_csv():
-    for i, m in enumerate(st.session_state.ms):
-        df = pd.DataFrame(m)
-        df.to_csv(f"matriz_{i}.csv", index=False)
+        
+def salvar_matriz_especifica_csv(idx):
+    m = st.session_state.ms[idx]
+    df = pd.DataFrame(m)
+    return df.to_csv(index=False).encode('utf-8')
 
 def carregar_matriz_csv(arquivo):
     try:
@@ -256,9 +256,22 @@ def menu():
                     st.success(f"Determinante: {det:.2f}")
 
     elif opcao == "salvar matrizes em CSV":
-        if st.sidebar.button("Salvar Todas"):
-            salvar_matrizes_csv()
-            st.success("Matrizes salvas como CSV.")
+        if st.session_state.ms:
+            idx = st.selectbox("Escolha a matriz para salvar:", 
+                               range(len(st.session_state.ms)), 
+                               format_func=lambda i: st.session_state.ts[i])
+            
+            csv_data = salvar_matriz_especifica_csv(idx)
+            nome_arquivo = f"{st.session_state.ts[idx]}.csv"
+    
+            st.download_button(
+                label="Baixar CSV",
+                data=csv_data,
+                file_name=nome_arquivo,
+                mime='text/csv'
+            )
+        else:
+            st.warning("Nenhuma matriz disponível para salvar.")
 
     elif opcao == "carregar matriz de CSV":
         arquivo = st.file_uploader("Escolha o arquivo CSV")
