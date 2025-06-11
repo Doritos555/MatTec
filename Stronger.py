@@ -126,6 +126,26 @@ def transposta_matriz_np(m):
     aux = aux.tolist()
     return aux
 
+def determinante_matriz_np(m):
+    try:
+        return float(np.linalg.det(np.array(m)))
+    except:
+        st.error("Erro ao calcular determinante.")
+        return None
+
+def salvar_matrizes_csv():
+    for i, m in enumerate(st.session_state.ms):
+        df = pd.DataFrame(m)
+        df.to_csv(f"matriz_{i}.csv", index=False)
+
+def carregar_matriz_csv(arquivo):
+    try:
+        df = pd.read_csv(arquivo)
+        return df.values.tolist()
+    except Exception as e:
+        st.error(f"Erro ao carregar arquivo: {e}")
+        return None
+
 #-----------------------------#
 
 def menu():
@@ -148,15 +168,29 @@ def menu():
     opcao = st.sidebar.selectbox(
         "SELECIONE A FUNÇÃO:",
         options=[
+            "recebe matriz manual",
             "recebe matriz aleatória",
             "inversa matriz",
             "transposta matriz",
             "produto de 2 matrizes",
+            "multiplica por escalar",
+            "determinante de matriz",
+            "salvar matrizes em CSV",
+            "carregar matriz de CSV",
             "limpar matrizes"
         ]
     )
 
-    if opcao == "recebe matriz aleatória":
+    if opcao == "recebe matriz manual":
+        n = st.sidebar.number_input("Linhas:", min_value=1, value=2)
+        k = st.sidebar.number_input("Colunas:", min_value=1, value=2)
+        m = recebe_matriz_manual(n, k)
+        if st.button("Salvar Matriz Manual"):
+            st.session_state.ms.append(m)
+            st.session_state.r += 1
+            st.session_state.ts.append(f"m{st.session_state.r}")
+
+    elif opcao == "recebe matriz aleatória":
         n = st.sidebar.number_input("Número de linhas (n):", min_value=1, value=3, step=1)
         k = st.sidebar.number_input("Número de colunas (k):", min_value=1, value=3, step=1)
 
@@ -203,6 +237,37 @@ def menu():
         else:
             st.warning("É necessário pelo menos duas matrizes.")
 
+    elif opcao == "multiplica por escalar":
+        if st.session_state.ms:
+            idx = st.sidebar.selectbox("Matriz:", range(len(st.session_state.ms)), format_func=lambda i: st.session_state.ts[i])
+            escalar = st.sidebar.number_input("Escalar:", value=2.0)
+            if st.sidebar.button("Multiplicar"):
+                resultado = multiplica_escalar_np(st.session_state.ms[idx], escalar)
+                st.session_state.ms.append(resultado)
+                st.session_state.r += 1
+                st.session_state.ts.append(f"{escalar} x {st.session_state.ts[idx]}")
+
+    elif opcao == "determinante de matriz":
+        if st.session_state.ms:
+            idx = st.sidebar.selectbox("Matriz:", range(len(st.session_state.ms)), format_func=lambda i: st.session_state.ts[i])
+            if st.sidebar.button("Calcular Determinante"):
+                det = determinante_matriz_np(st.session_state.ms[idx])
+                if det is not None:
+                    st.success(f"Determinante: {det:.2f}")
+
+    elif opcao == "salvar matrizes em CSV":
+        if st.sidebar.button("Salvar Todas"):
+            salvar_matrizes_csv()
+            st.success("Matrizes salvas como CSV.")
+
+    elif opcao == "carregar matriz de CSV":
+        arquivo = st.file_uploader("Escolha o arquivo CSV")
+        if arquivo and st.button("Carregar"):
+            matriz = carregar_matriz_csv(arquivo)
+            if matriz:
+                st.session_state.ms.append(matriz)
+                st.session_state.r += 1
+                st.session_state.ts.append(f"m{st.session_state.r} (CSV)")
 
     elif opcao == "limpar matrizes":
         if st.sidebar.button("Confirmar Limpeza"):
