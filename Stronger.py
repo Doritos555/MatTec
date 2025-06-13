@@ -271,7 +271,7 @@ def menu():
                 mime='text/csv'
             )
             if baixado:
-                st.image("Ralsei.gif", caption="Matriz salva com sucesso!", use_column_width=True)
+                st.image("Ralsei.gif", caption="Matriz salva com sucesso!", use_container_width=True)
         else:
             st.warning("Nenhuma matriz disponível para salvar.")
 
