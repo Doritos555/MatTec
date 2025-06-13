@@ -23,8 +23,6 @@ def imprime_matriz(m, title=" ", m_plot = None, save = False, ):
     light_red_blue = LinearSegmentedColormap.from_list("light_red_blue", colors)
     
     m_plot.imshow(m, cmap=light_red_blue)
-    #m_plot.imshow(m, cmap='coolwarm')
-    #m_plot.imshow(m, cmap='viridis')
 
     linhas = range(len(m))
     colunas = range(len(m[0]))
@@ -51,8 +49,8 @@ def imprime_matriz(m, title=" ", m_plot = None, save = False, ):
 def imprime_lista_matrizes(ms, ts, title = "Lista de Matrizes"):
 
     if len(ms) == 0:    
-        print("Lista de matrizes vazia, nada a exibir!")
-        return
+        st.write("Lista de matrizes vazia, nada a exibir!")
+        return None
 
     fig, ms_plots = plt.subplots(1, len(ms))
 
@@ -92,32 +90,36 @@ def recebe_matriz_aleatoria(n, k):
             linha.append(int(num))
         m.append(linha)
 
-    return(m)
+    return m
 
 def multiplica_escalar_np(m, escalar):
-
     aux = np.array(m)
     aux = aux * escalar
     aux = aux.tolist()
     return aux
 
 def inversa_matriz_np(m):
-
     aux = np.array(m)
-    aux = np.linalg.inv(aux)
+    try:
+        aux = np.linalg.inv(aux)
+    except np.linalg.LinAlgError:
+        st.error("Matriz singular, não é possível calcular a inversa.")
+        return None
     aux = aux.tolist()
     return aux
 
 def produto_2_matrizes_np(ms):
-
     aux1 = np.array(ms[0])
     aux2 = np.array(ms[1])
-    aux = np.dot(aux1, aux2)
+    try:
+        aux = np.dot(aux1, aux2)
+    except ValueError:
+        st.error("Dimensões incompatíveis para multiplicação.")
+        return None
     aux = aux.tolist()
     return aux
 
 def transposta_matriz_np(m):
-    
     aux = np.array(m)
     aux = np.transpose(aux)
     aux = aux.tolist()
@@ -129,7 +131,7 @@ def determinante_matriz_np(m):
     except:
         st.error("Erro ao calcular determinante.")
         return None
-        
+
 def salvar_matriz_especifica_csv(idx):
     m = st.session_state.ms[idx]
     df = pd.DataFrame(m)
@@ -206,7 +208,7 @@ def menu():
             idx = st.sidebar.selectbox("Escolha a matriz:", range(len(st.session_state.ms)), format_func=lambda i: st.session_state.ts[i])
             if st.sidebar.button("Calcular Inversa"):
                 inv = inversa_matriz_np(st.session_state.ms[idx])
-                if inv:
+                if inv is not None:
                     st.session_state.r += 1
                     st.session_state.ms.append(inv)
                     st.session_state.ts.append(f"Inversa de {st.session_state.ts[idx]}")
@@ -231,7 +233,7 @@ def menu():
             if st.sidebar.button("Multiplicar"):
                 ms_selecionadas = [st.session_state.ms[idx1], st.session_state.ms[idx2]]
                 resultado = produto_2_matrizes_np(ms_selecionadas)
-                if resultado:
+                if resultado is not None:
                     st.session_state.r += 1
                     st.session_state.ms.append(resultado)
                     st.session_state.ts.append(f"{st.session_state.ts[idx1]} x {st.session_state.ts[idx2]}")
@@ -257,6 +259,8 @@ def menu():
                     st.image("Deltarune.gif", use_container_width=True)
                     st.success(f"Determinante: {det:.2f}")
                     st.session_state.exibir_matrizes = False
+        else:
+            st.warning("Nenhuma matriz disponível.")
 
     elif opcao == "salvar matrizes em CSV":
         if st.session_state.ms:
@@ -267,52 +271,51 @@ def menu():
             # Entrada para o nome do arquivo
             nome_arquivo_usuario = st.text_input("Digite o nome do arquivo (sem .csv):", 
                                                 value=st.session_state.ts[idx])
-            
-            # Garante extensão .csv
-            nome_arquivo_final = f"{nome_arquivo_usuario.strip()}.csv"
 
-            # Gera o CSV
-            csv_data = salvar_matriz_especifica_csv(idx)
+            if nome_arquivo_usuario.strip() == "":
+                st.warning("Por favor, insira um nome válido para o arquivo.")
+            else:
+                nome_arquivo_final = f"{nome_arquivo_usuario.strip()}.csv"
+                csv_data = salvar_matriz_especifica_csv(idx)
 
-            # Botão para baixar
-            baixado = st.download_button(
-                label="Baixar CSV",
-                data=csv_data,
-                file_name=nome_arquivo_final,
-                mime='text/csv'
-            )
+                baixado = st.download_button(
+                    label="Baixar CSV",
+                    data=csv_data,
+                    file_name=nome_arquivo_final,
+                    mime='text/csv'
+                )
 
-            if baixado:
-                st.session_state.exibir_matrizes = False
-                st.image("Ralsei.gif", caption=f"Arquivo '{nome_arquivo_final}' salvo com sucesso!", use_container_width=True)
+                if baixado:
+                    st.session_state.exibir_matrizes = False
+                    st.image("Ralsei.gif", caption=f"Arquivo '{nome_arquivo_final}' salvo com sucesso!", use_container_width=True)
         else:
             st.warning("Nenhuma matriz disponível para salvar.")
 
     elif opcao == "carregar matriz de CSV":
         arquivo = st.file_uploader("Escolha o arquivo CSV")
-        if arquivo and st.button("Carregar"):
-            matriz = carregar_matriz_csv(arquivo)
-            if matriz:
-                st.session_state.ms.append(matriz)
-                st.session_state.r += 1
-                st.session_state.ts.append(f"m{st.session_state.r} (CSV)")
+        if arquivo:
+            if st.button("Carregar"):
+                matriz = carregar_matriz_csv(arquivo)
+                if matriz:
+                    st.session_state.ms.append(matriz)
+                    st.session_state.r += 1
+                    st.session_state.ts.append(f"m{st.session_state.r} (CSV)")
+                    st.success("Matriz carregada com sucesso!")
 
     elif opcao == "limpar matrizes":
         if st.sidebar.button("Confirmar Limpeza"):
             st.session_state.ms.clear()
             st.session_state.ts.clear()
             st.session_state.r = 0
-            sucesso = st.success
-            if sucesso:
-                st.image("Ralsei2.gif", caption="Matrizes apagadas com sucesso!", use_container_width=True)
+            st.success("Matrizes apagadas com sucesso!")
+            st.image("Ralsei2.gif", caption="Matrizes apagadas com sucesso!", use_container_width=True)
+
     if st.session_state.exibir_matrizes:
         fig = imprime_lista_matrizes(st.session_state.ms, st.session_state.ts)
         if fig is not None:
             st.pyplot(fig)
     else:
         st.session_state.exibir_matrizes = True  # reseta para exibir na próxima vez
-
-
 
 if __name__ == '__main__':
     menu()
