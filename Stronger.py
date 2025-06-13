@@ -264,18 +264,13 @@ def menu():
             csv_data = salvar_matriz_especifica_csv(idx)
             nome_arquivo = f"{st.session_state.ts[idx]}.csv"
     
-            st.download_button(
+            baixado = st.download_button(
                 label="Baixar CSV",
                 data=csv_data,
                 file_name=nome_arquivo,
                 mime='text/csv'
             )
-            if st.download_button(
-                label="Baixar CSV",
-                data=csv_data,
-                file_name=nome_arquivo,
-                mime='text/csv'
-            ):
+            if baixado:
                 st.image("Ralsei.gif", caption="Matriz salva com sucesso!", use_column_width=True)
         else:
             st.warning("Nenhuma matriz disponível para salvar.")
