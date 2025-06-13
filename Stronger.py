@@ -264,35 +264,31 @@ def menu():
 
     elif opcao == "salvar matrizes em CSV":
         if st.session_state.ms:
-            idx = st.selectbox(
-                "Escolha a matriz para salvar:", 
-                range(len(st.session_state.ms)), 
-                format_func=lambda i: st.session_state.ts[i]
-            )
+            idx = st.selectbox("Escolha a matriz para salvar:", 
+                            range(len(st.session_state.ms)), 
+                            format_func=lambda i: st.session_state.ts[i])
 
-            nome_usuario = st.text_input(
-                "Digite o nome do arquivo (sem .csv):", 
-                value=st.session_state.ts[idx],
-                key="nome_csv_customizado"
-            )
+            with st.form("form_salvar_csv"):
+                nome_usuario = st.text_input(
+                    "Digite o nome do arquivo (sem .csv):", 
+                    value=st.session_state.ts[idx]
+                )
 
-            if nome_usuario.strip() != "":
+                submitted = st.form_submit_button("Baixar CSV")
+            
+            if submitted:
                 nome_arquivo_final = f"{nome_usuario.strip()}.csv"
                 csv_data = salvar_matriz_especifica_csv(idx)
 
-                baixado = st.download_button(
-                    label="📥 Baixar matriz em CSV",
+                st.download_button(
+                    label="Clique aqui para salvar",
                     data=csv_data,
                     file_name=nome_arquivo_final,
                     mime='text/csv',
-                    key="botao_download_csv"
+                    key="download_csv_unico"
                 )
-
-                if baixado:
-                    st.session_state.exibir_matrizes = False
-                    st.image("Ralsei.gif", caption=f"Matriz salva como '{nome_arquivo_final}' com sucesso!", use_container_width=True)
-            else:
-                st.info("Digite um nome para o arquivo para liberar o botão de download.")
+                st.image("Ralsei.gif", caption=f"'{nome_arquivo_final}' salvo com sucesso!", use_container_width=True)
+                st.session_state.exibir_matrizes = False
         else:
             st.warning("Nenhuma matriz disponível para salvar.")
 
