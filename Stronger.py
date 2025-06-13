@@ -270,6 +270,13 @@ def menu():
                 file_name=nome_arquivo,
                 mime='text/csv'
             )
+            if st.download_button(
+                label="Baixar CSV",
+                data=csv_data,
+                file_name=nome_arquivo,
+                mime='text/csv'
+            ):
+                st.image("Ralsei.gif", caption="Matriz salva com sucesso!", use_column_width=True)
         else:
             st.warning("Nenhuma matriz disponível para salvar.")
 
