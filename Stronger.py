@@ -157,6 +157,7 @@ def menu():
         st.session_state.ms = []
         st.session_state.ts = []
         st.session_state.r = 0
+        st.session_state.exibir_matrizes = True
 
     st.sidebar.header("MENU")
 
@@ -271,10 +272,8 @@ def menu():
                 mime='text/csv'
             )
             if baixado:
+                st.session_state.exibir_matrizes = False
                 st.image("Ralsei.gif", caption="Matriz salva com sucesso!", use_container_width=True)
-                fig = imprime_lista_matrizes(st.session_state.ms, st.session_state.ts)
-                if fig is not None:
-                    st.pyplot(fig)
         else:
             st.warning("Nenhuma matriz disponível para salvar.")
 
@@ -294,9 +293,13 @@ def menu():
             st.session_state.r = 0
             st.success("Matrizes apagadas com sucesso!")
 
-    fig = imprime_lista_matrizes(st.session_state.ms, st.session_state.ts)
-    if fig is not None:
-        st.pyplot(fig)
+    if st.session_state.exibir_matrizes:
+        fig = imprime_lista_matrizes(st.session_state.ms, st.session_state.ts)
+        if fig is not None:
+            st.pyplot(fig)
+    else:
+        st.session_state.exibir_matrizes = True  # reseta para exibir na próxima vez
+
 
 
 if __name__ == '__main__':
