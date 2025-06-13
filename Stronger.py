@@ -254,10 +254,8 @@ def menu():
             if st.sidebar.button("Calcular Determinante"):
                 det = determinante_matriz_np(st.session_state.ms[idx])
                 if det is not None:
-                    sucesso = st.success
-                    if sucesso:
-                        st.session_state.exibir_matrizes = False
-                        st.image("Deltarune.gif", caption=f"Determinante: {det:.2f}", use_container_width=True)
+                    st.image("Deltarune.gif", use_container_width=True)
+                    st.success(f"Determinante: {det:.2f}")
 
     elif opcao == "salvar matrizes em CSV":
         if st.session_state.ms:
