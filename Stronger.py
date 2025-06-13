@@ -267,22 +267,19 @@ def menu():
             nome_arquivo_usuario = st.text_input("Digite o nome do arquivo (sem .csv):", 
                                                 value=st.session_state.ts[idx])
 
+            # Gerar CSV em bytes aqui fora do botão, sempre que mudar o índice ou nome
             if nome_arquivo_usuario.strip() != "":
                 nome_arquivo_final = f"{nome_arquivo_usuario.strip()}.csv"
                 csv_data = salvar_matriz_especifica_csv(idx)
 
-                # Botão para download do CSV
-                baixado = st.download_button(
+                # Aqui o botão já tem os dados e o nome corretos
+                st.download_button(
                     label=f"Baixar matriz '{nome_arquivo_final}'",
                     data=csv_data,
                     file_name=nome_arquivo_final,
                     mime='text/csv',
                     key="download_csv"
                 )
-
-                # Mostra o GIF logo abaixo do botão, para indicar que o arquivo está pronto para download
-                st.image("Ralsei.gif", caption="Matriz pronta para download!", use_container_width=True)
-
         else:
             st.warning("Nenhuma matriz disponível para salvar.")
 
