@@ -256,6 +256,7 @@ def menu():
                 if det is not None:
                     st.image("Deltarune.gif", use_container_width=True)
                     st.success(f"Determinante: {det:.2f}")
+                    st.session_state.exibir_matrizes = False
 
     elif opcao == "salvar matrizes em CSV":
         if st.session_state.ms:
