@@ -265,24 +265,34 @@ def menu():
     elif opcao == "salvar matrizes em CSV":
         if st.session_state.ms:
             idx = st.selectbox("Escolha a matriz para salvar:", 
-                               range(len(st.session_state.ms)), 
-                               format_func=lambda i: st.session_state.ts[i])
-            
+                            range(len(st.session_state.ms)), 
+                            format_func=lambda i: st.session_state.ts[i])
+
+            # Entrada para o nome do arquivo (sem .csv)
+            nome_usuario = st.text_input("Digite o nome do arquivo (sem .csv):", 
+                                        value=st.session_state.ts[idx])
+
+            # Garante extensão correta
+            nome_arquivo_final = f"{nome_usuario.strip()}.csv" if nome_usuario.strip() else f"{st.session_state.ts[idx]}.csv"
+
+            # Gera o CSV da matriz escolhida
             csv_data = salvar_matriz_especifica_csv(idx)
-            nome_arquivo = f"{st.session_state.ts[idx]}.csv"
-    
+
+            # Botão para baixar
             baixado = st.download_button(
                 label="Baixar CSV",
                 data=csv_data,
-                file_name=nome_arquivo,
+                file_name=nome_arquivo_final,
                 mime='text/csv'
             )
+
+            # Mensagem de confirmação
             if baixado:
                 st.session_state.exibir_matrizes = False
-                st.image("Ralsei.gif", caption="Matriz salva com sucesso!", use_container_width=True)
+                st.image("Ralsei.gif", caption=f"Matriz salva como '{nome_arquivo_final}' com sucesso!", use_container_width=True)
         else:
             st.warning("Nenhuma matriz disponível para salvar.")
-            
+
     elif opcao == "carregar matriz de CSV":
         arquivo = st.file_uploader("Escolha o arquivo CSV")
         if arquivo:
