@@ -260,38 +260,33 @@ def menu():
 
     elif opcao == "salvar matrizes em CSV":
         if st.session_state.ms:
-            with st.form("form_salvar_csv"):
-                idx = st.selectbox("Escolha a matriz para salvar:", 
-                                   range(len(st.session_state.ms)), 
-                                   format_func=lambda i: st.session_state.ts[i])
-                
-                nome_arquivo_usuario = st.text_input(
-                    "Digite o nome do arquivo (sem .csv):", 
-                    value=st.session_state.ts[idx]
-                )
+            idx = st.selectbox("Escolha a matriz para salvar:", 
+                            range(len(st.session_state.ms)), 
+                            format_func=lambda i: st.session_state.ts[i])
 
-                submitted = st.form_submit_button("Baixar matriz")
-                
-                if submitted:
-                    if nome_arquivo_usuario.strip() == "":
-                        st.error("Digite um nome de arquivo válido.")
-                    else:
-                        nome_arquivo_final = f"{nome_arquivo_usuario.strip()}.csv"
-                        csv_data = salvar_matriz_especifica_csv(idx)
+            # Entrada para o nome do arquivo
+            nome_arquivo_usuario = st.text_input("Digite o nome do arquivo (sem .csv):", 
+                                                value=st.session_state.ts[idx])
+            
+            # Garante extensão .csv
+            nome_arquivo_final = f"{nome_arquivo_usuario.strip()}.csv"
 
-                        st.download_button(
-                            label="Clique aqui para confirmar o download",
-                            data=csv_data,
-                            file_name=nome_arquivo_final,
-                            mime='text/csv',
-                            key="download_csv"
-                        )
+            # Gera o CSV
+            csv_data = salvar_matriz_especifica_csv(idx)
 
-                        st.session_state.exibir_matrizes = False
-                        st.image("Ralsei.gif", caption="Matriz pronta para download!", use_container_width=True)
+            # Botão para baixar
+            baixado = st.download_button(
+                label="Baixar CSV",
+                data=csv_data,
+                file_name=nome_arquivo_final,
+                mime='text/csv'
+            )
+
+            if baixado:
+                st.session_state.exibir_matrizes = False
+                st.image("Ralsei.gif", caption=f"Arquivo '{nome_arquivo_final}' salvo com sucesso!", use_container_width=True)
         else:
             st.warning("Nenhuma matriz disponível para salvar.")
-
 
     elif opcao == "carregar matriz de CSV":
         arquivo = st.file_uploader("Escolha o arquivo CSV")
