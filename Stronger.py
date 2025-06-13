@@ -261,12 +261,18 @@ def menu():
     elif opcao == "salvar matrizes em CSV":
         if st.session_state.ms:
             idx = st.selectbox("Escolha a matriz para salvar:", 
-                               range(len(st.session_state.ms)), 
-                               format_func=lambda i: st.session_state.ts[i])
+                            range(len(st.session_state.ms)), 
+                            format_func=lambda i: st.session_state.ts[i])
             
+            nome_padrao = f"{st.session_state.ts[idx]}.csv"
+            nome_arquivo = st.text_input("Nome do arquivo CSV:", value=nome_padrao)
+
+            # Garante que o nome termine com .csv
+            if not nome_arquivo.endswith(".csv"):
+                nome_arquivo += ".csv"
+
             csv_data = salvar_matriz_especifica_csv(idx)
-            nome_arquivo = f"{st.session_state.ts[idx]}.csv"
-    
+
             baixado = st.download_button(
                 label="Baixar CSV",
                 data=csv_data,
