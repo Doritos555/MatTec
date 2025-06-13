@@ -272,6 +272,9 @@ def menu():
             )
             if baixado:
                 st.image("Ralsei.gif", caption="Matriz salva com sucesso!", use_container_width=True)
+                fig = imprime_lista_matrizes(st.session_state.ms, st.session_state.ts)
+                if fig is not None:
+                    st.pyplot(fig)
         else:
             st.warning("Nenhuma matriz disponível para salvar.")
 
