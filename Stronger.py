@@ -268,7 +268,6 @@ def menu():
                             range(len(st.session_state.ms)), 
                             format_func=lambda i: st.session_state.ts[i])
 
-            # Entrada para o nome do arquivo
             nome_arquivo_usuario = st.text_input("Digite o nome do arquivo (sem .csv):", 
                                                 value=st.session_state.ts[idx])
 
@@ -276,18 +275,14 @@ def menu():
                 st.warning("Por favor, insira um nome válido para o arquivo.")
             else:
                 nome_arquivo_final = f"{nome_arquivo_usuario.strip()}.csv"
-                csv_data = salvar_matriz_especifica_csv(idx)
+                csv_data = salvar_matriz_especifica_csv(idx)  # só gera o CSV, não mexe no estado
 
-                baixado = st.download_button(
+                st.download_button(
                     label="Baixar CSV",
                     data=csv_data,
                     file_name=nome_arquivo_final,
                     mime='text/csv'
                 )
-
-                if baixado:
-                    st.session_state.exibir_matrizes = False
-                    st.image("Ralsei.gif", caption=f"Arquivo '{nome_arquivo_final}' salvo com sucesso!", use_container_width=True)
         else:
             st.warning("Nenhuma matriz disponível para salvar.")
 
