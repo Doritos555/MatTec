@@ -306,12 +306,6 @@ def menu():
                     st.session_state.ts.append(f"m{st.session_state.r} (CSV)")
                     st.success("Matriz carregada com sucesso!")
 
-    elif opcao == "nada a olhar aqui":
-        if st.sidebar.button("Executar"):
-            imagem = Image.open(r"lixo.jpg")
-            st.image(imagem, caption="Jogo merda")
-
-
     elif opcao == "limpar matrizes":
         if st.sidebar.button("Confirmar Limpeza"):
             st.session_state.ms.clear()
@@ -326,6 +320,13 @@ def menu():
             st.pyplot(fig)
     else:
         st.session_state.exibir_matrizes = True  # reseta para exibir na próxima vez        
+
+    
+    elif opcao == "nada a olhar aqui":
+        if st.sidebar.button("Executar"):
+            imagem = Image.open(r"lixo.jpg")
+            st.image(imagem, caption="Jogo merda")
+
 
 if __name__ == '__main__':
     menu()
