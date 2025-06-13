@@ -291,8 +291,9 @@ def menu():
             st.session_state.ms.clear()
             st.session_state.ts.clear()
             st.session_state.r = 0
-            st.success("Matrizes apagadas com sucesso!")
-
+            sucesso = st.success
+            if sucesso:
+                st.image("Ralsei2.gif", caption="Matrizes apagadas com sucesso!", use_container_width=True)
     if st.session_state.exibir_matrizes:
         fig = imprime_lista_matrizes(st.session_state.ms, st.session_state.ts)
         if fig is not None:
