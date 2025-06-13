@@ -179,8 +179,7 @@ def menu():
             "determinante de matriz",
             "salvar matrizes em CSV",
             "carregar matriz de CSV",
-            "limpar matrizes",
-            "nada a olhar aqui"
+            "limpar matrizes"
         ]
     )
 
@@ -320,13 +319,6 @@ def menu():
             st.pyplot(fig)
     else:
         st.session_state.exibir_matrizes = True  # reseta para exibir na próxima vez        
-
-    
-    elif opcao == "nada a olhar aqui":
-        if st.sidebar.button("Executar"):
-            imagem = Image.open(r"lixo.jpg")
-            st.image(imagem, caption="Jogo merda")
-
 
 if __name__ == '__main__':
     menu()
