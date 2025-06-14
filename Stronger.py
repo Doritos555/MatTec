@@ -132,6 +132,7 @@ def determinante_matriz_np(m):
         return float(np.linalg.det(np.array(m)))
     except:
         st.error("Erro ao calcular determinante.")
+        st.image("teto2.gif")
         return None
 
 def salvar_matriz_especifica_csv(idx):
