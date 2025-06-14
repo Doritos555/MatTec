@@ -218,6 +218,7 @@ def menu():
                     st.session_state.ts.append(f"Inversa de {st.session_state.ts[idx]}")
         else:
             st.warning("Nenhuma matriz disponível.")
+            st.image("Cry.gif")
 
     elif opcao == "transposta matriz":
         if st.session_state.ms:
