@@ -133,7 +133,7 @@ def determinante_matriz_np(m):
     except:
         st.error("Erro ao calcular determinante.")
         st.image("teto2.gif")
-        st.audio("Sad.MP3")
+        st.audio("Sad.mp3")
         return None
 
 def salvar_matriz_especifica_csv(idx):
