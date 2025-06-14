@@ -264,6 +264,7 @@ def menu():
                     st.session_state.exibir_matrizes = False
         else:
             st.warning("Nenhuma matriz disponível.")
+            st.image("teto2.gif")
 
     elif opcao == "salvar matrizes em CSV":
         if st.session_state.ms:
