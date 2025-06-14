@@ -276,14 +276,14 @@ def menu():
                     value=st.session_state.ts[idx]
                 )
 
-                submitted = st.form_submit_button("Baixar CSV")
+                submitted = st.form_submit_button("Clique aqui para gerar um arquivo para Download")
             
             if submitted:
                 nome_arquivo_final = f"{nome_usuario.strip()}.csv"
                 csv_data = salvar_matriz_especifica_csv(idx)
 
                 st.download_button(
-                    label="Clique aqui para salvar",
+                    label="Clique aqui para baixar",
                     data=csv_data,
                     file_name=nome_arquivo_final,
                     mime='text/csv',
