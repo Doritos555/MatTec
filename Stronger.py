@@ -241,6 +241,7 @@ def menu():
                     st.session_state.ts.append(f"{st.session_state.ts[idx1]} x {st.session_state.ts[idx2]}")
         else:
             st.warning("É necessário pelo menos duas matrizes.")
+            st.image("teto.gif")
 
     elif opcao == "multiplica por escalar":
         if st.session_state.ms:
