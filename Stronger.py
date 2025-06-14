@@ -106,6 +106,7 @@ def inversa_matriz_np(m):
         aux = np.linalg.inv(aux)
     except np.linalg.LinAlgError:
         st.error("Matriz singular, não é possível calcular a inversa.")
+        st.image("Jack.gif")
         return None
     aux = aux.tolist()
     return aux
