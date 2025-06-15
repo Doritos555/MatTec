@@ -94,6 +94,21 @@ def recebe_matriz_aleatoria(n, k):
 
     return m
 
+def soma_matrizes_np(m1, m2):
+    try:
+        a = np.array(m1)
+        b = np.array(m2)
+        if a.shape != b.shape:
+            st.error("As matrizes devem ter as mesmas dimensões para soma.")
+            st.image("Aqua.gif")
+            return None
+        soma = np.add(a, b)
+        return soma.tolist()
+    except Exception as e:
+        st.error(f"Erro ao somar matrizes: {e}")
+        st.image("Fing.gif")
+        return None
+
 def multiplica_escalar_np(m, escalar):
     aux = np.array(m)
     aux = aux * escalar
@@ -179,6 +194,7 @@ def menu():
             "transposta matriz",
             "produto de 2 matrizes",
             "multiplica por escalar",
+            "soma de 2 matrizes",
             "determinante de matriz",
             "salvar matrizes em CSV",
             "carregar matriz de CSV",
@@ -256,6 +272,22 @@ def menu():
                 st.session_state.ms.append(resultado)
                 st.session_state.r += 1
                 st.session_state.ts.append(f"{escalar} x {st.session_state.ts[idx]}")
+
+    elif opcao == "soma de 2 matrizes":
+        if len(st.session_state.ms) >= 2:
+            idx1 = st.sidebar.selectbox("Matriz 1:", range(len(st.session_state.ms)), format_func=lambda i: st.session_state.ts[i], key="soma1")
+            idx2 = st.sidebar.selectbox("Matriz 2:", range(len(st.session_state.ms)), format_func=lambda i: st.session_state.ts[i], key="soma2")
+            if st.sidebar.button("Somar"):
+                m1 = st.session_state.ms[idx1]
+                m2 = st.session_state.ms[idx2]
+                resultado = soma_matrizes_np(m1, m2)
+                if resultado is not None:
+                    st.session_state.r += 1
+                    st.session_state.ms.append(resultado)
+                    st.session_state.ts.append(f"{st.session_state.ts[idx1]} + {st.session_state.ts[idx2]}")
+        else:
+            st.warning("É necessário pelo menos duas matrizes.")
+
 
     elif opcao == "determinante de matriz":
         if st.session_state.ms:
