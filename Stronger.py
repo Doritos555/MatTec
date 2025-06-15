@@ -8,6 +8,7 @@ import pandas as pd
 import streamlit as st
 from PIL import Image
 import random
+import streamlit.components.v1 as components 
 
 #-----------------------------#
 
@@ -198,6 +199,7 @@ def menu():
             "determinante de matriz",
             "salvar matrizes em CSV",
             "carregar matriz de CSV",
+            "jogar Doom 🎮",
             "limpar matrizes"
         ]
     )
@@ -344,6 +346,17 @@ def menu():
                     st.session_state.r += 1
                     st.session_state.ts.append(f"m{st.session_state.r} (CSV)")
                     st.success("Matriz carregada com sucesso!")
+
+
+    elif opcao == "jogar Doom 🎮":
+        st.subheader("Doom no Navegador")
+        st.markdown("Clássico jogo de tiro em primeira pessoa dos anos 90. Divirta-se!")
+
+        components.iframe(
+            "https://js-dos.com/games/doom.exe.html",  # link da versão jogável online
+            height=600,
+            scrolling=True
+        )
 
     elif opcao == "limpar matrizes":
         if st.sidebar.button("Confirmar Limpeza"):
