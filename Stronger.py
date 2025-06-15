@@ -247,6 +247,7 @@ def menu():
                 st.session_state.ts.append(f"Transposta de {st.session_state.ts[idx]}")
         else:
             st.warning("Nenhuma matriz disponível.")
+            st.image("Neko.gif")
 
     elif opcao == "produto de 2 matrizes":
         if len(st.session_state.ms) >= 2:
