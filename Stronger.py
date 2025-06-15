@@ -358,6 +358,7 @@ def menu():
             height=600,
             scrolling=True
         )
+        st.session_state.exibir_matrizes = False
 
     elif opcao == "lutar contra Sans 💀":
         st.subheader("Luta contra o Sans!")
@@ -369,6 +370,7 @@ def menu():
             width=960,
             scrolling=False
         )
+        st.session_state.exibir_matrizes = False
 
     elif opcao == "limpar matrizes":
         if st.sidebar.button("Confirmar Limpeza"):
