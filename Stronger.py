@@ -200,6 +200,7 @@ def menu():
             "salvar matrizes em CSV",
             "carregar matriz de CSV",
             "jogar Doom 🎮",
+            "lutar contra Sans 💀",
             "limpar matrizes"
         ]
     )
@@ -356,6 +357,17 @@ def menu():
             "https://js-dos.com/games/doom.exe.html",  # link da versão jogável online
             height=600,
             scrolling=True
+        )
+
+    elif opcao == "lutar contra Sans 💀":
+        st.subheader("Luta contra o Sans!")
+        st.markdown("Prepare-se para uma batalha difícil...")
+
+        components.iframe(
+            src="https://jcw87.github.io/c2-sans-fight/",
+            height=640,
+            width=960,
+            scrolling=False
         )
 
     elif opcao == "limpar matrizes":
