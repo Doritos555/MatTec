@@ -352,17 +352,18 @@ def menu():
     elif opcao == "jogar Doom 🎮":
         st.subheader("Doom no Navegador")
         st.markdown("Clássico jogo de tiro em primeira pessoa dos anos 90. Divirta-se!")
+        st.session_state.exibir_matrizes = False
 
         components.iframe(
             "https://js-dos.com/games/doom.exe.html",  # link da versão jogável online
             height=600,
             scrolling=True
         )
-        st.session_state.exibir_matrizes = False
 
     elif opcao == "lutar contra Sans 💀":
         st.subheader("Luta contra o Sans!")
         st.markdown("Prepare-se para uma batalha difícil...")
+        st.session_state.exibir_matrizes = False
 
         components.iframe(
             src="https://jcw87.github.io/c2-sans-fight/",
@@ -370,7 +371,6 @@ def menu():
             width=960,
             scrolling=False
         )
-        st.session_state.exibir_matrizes = False
 
     elif opcao == "limpar matrizes":
         if st.sidebar.button("Confirmar Limpeza"):
